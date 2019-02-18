@@ -55,6 +55,29 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
     reveals.clear();
   }
 
+  int _getStreakLength(String streakId) {
+    return widget.values.where((value) {
+      return value.streakId == streakId;
+    }).toList().length;
+  }
+
+  String _getStreakTime(String streakId) {
+    var streak = widget.values.where((value) {
+      return value.streakId == streakId;
+    }).toList();
+
+    streak.sort((a, b) {
+      return a.timeNow.compareTo(b.timeNow);
+    });
+    if (streak.length < 2) {
+      return 'N/A';
+    }
+    var first = streak[0];
+    var last = streak[streak.length - 1];
+    int secondsDiff = last.timeNow.difference(first.timeNow).inSeconds;
+    return '$secondsDiff';
+  }
+
   Widget buildPiSequence(BuildContext context) {
     int index = 0;
     bool useAlternateColor = false;
@@ -119,9 +142,21 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
                     showDialog(
                       context: context,
                       builder: (_) => SimpleDialog(
-                        title: const Text('STREAK'),
+                        contentPadding: EdgeInsets.all(16),
+                        title: const Text('STREAK 😃'),
                         children: <Widget>[
-                          Container()
+                          Text(
+                            'length: ${_getStreakLength(value.streakId).toString()}',
+                            style:TextStyle(
+                              fontSize: 16
+                            )
+                          ),
+                          Text(
+                            'time in sec: ${_getStreakTime(value.streakId)}',
+                            style: TextStyle(
+                              fontSize: 16
+                            )
+                          )
                         ],
                       )
                     );
