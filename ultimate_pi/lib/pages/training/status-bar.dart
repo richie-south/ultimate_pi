@@ -69,19 +69,35 @@ class _StatusContainer extends State<StatusContainer>
 
 class Streak extends StatelessWidget {
   final int streak;
+  final List<String> lostStreakEmoji = [
+    '🤬',
+    '😡',
+    '😢',
+    '😩',
+    '👎',
+    '🔫',
+    '💔',
+    '⛔️'
+  ];
+
   final List<String> streakEmoji = [
     '',
     '',
     '',
     '🤩',
     '😍',
+    '🆒',
     '🙏',
+    '🍆',
     '🙀',
     '😀',
     '❗️',
+    '🥑',
+
     '👌',
     '🤓',
     '👊',
+    '⭐️',
     '🍌',
     '❤️'
   ];
@@ -111,7 +127,7 @@ class Streak extends StatelessWidget {
                 fontSize: 26.0,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
-                decorationStyle: TextDecorationStyle.wavy,
+                decorationStyle: TextDecorationStyle.solid,
                 decorationColor: Colors.blue,
                 decoration: TextDecoration.underline,
                 letterSpacing: 1.0)));

@@ -42,29 +42,53 @@ class _References extends State<References> {
     });
   }
 
-  List<TextSpan> getNumbersToRender() {
+  Column getNumbersToRender() {
+
     if (maxNumbersToRender > piNumbers.length) {
       maxNumbersToRender = piNumbers.length - 1;
     }
     int index = 0;
     List<String> numbers =
         piNumbers.substring(0, this.maxNumbersToRender).split('');
-    return numbers.map((String number) {
-      var testSpan = TextSpan(
-          text: (index + 1) % 6 == 0 ? '$number\n' : number,
-          style: TextStyle(
-            fontSize: 60.0,
-            letterSpacing: 8.0,
-            background: Paint()..color = (index == topResults) && index != 0 ? Colors.blue : Colors.black,
-            decorationStyle: TextDecorationStyle.wavy,
-            decorationColor: Colors.blue,
-            decoration: index >= this.streakStart && index <= this.streakEnd && this.streakStart != this.streakEnd
-                ? TextDecoration.underline
-                : TextDecoration.none,
-          ));
+
+    List<Row> rows = [];
+    List<Widget> textSpans = [];
+    numbers.forEach((String number) {
+      if (textSpans.length == 6) {
+        rows.add(Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: textSpans,));
+        textSpans = [];
+      }
+
+      var textSpan = TextSpan(
+        text: number,
+        style: TextStyle(
+          fontSize: 60.0,
+          letterSpacing: 8.0,
+          color: Colors.white,
+          background: Paint()..color = (index == topResults - 1) && index != 0 ? Colors.blue : Colors.black,
+          decorationStyle: TextDecorationStyle.solid,
+          decorationColor: Colors.blue,
+          decoration: index >= this.streakStart && index <= this.streakEnd && this.streakStart != this.streakEnd
+              ? TextDecoration.underline
+              : TextDecoration.none,
+        ));
       index += 1;
-      return testSpan;
-    }).toList();
+      textSpans.add(
+        RichText(
+          text: textSpan,
+        )
+      );
+
+      return textSpan;
+
+    });
+
+    return Column(
+      children: rows
+    );
   }
 
   void onViewMore() {
@@ -80,36 +104,32 @@ class _References extends State<References> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('HELP'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('LOAD MORE', style: TextStyle(color: Colors.white)),
-              onPressed: onViewMore,
-            )
-          ],
-        ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: RichText(
-                      text: TextSpan(
-                          text: '3.\n',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 120.0,
-                        ),
-                      children: this.getNumbersToRender()),
-                    )
-                  )
-                )
-              )
-            )
-          ],
-        )
-      );
+      appBar: AppBar(
+        title: Text('HELP'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('LOAD MORE', style: TextStyle(color: Colors.white)),
+            onPressed: onViewMore,
+          )
+        ],
+      ),
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          Container(
+            alignment: Alignment(0, 1),
+            padding: EdgeInsets.only(left: 16),
+            child: Text(
+              '3.',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 120.0,
+              ),
+            ),
+          ),
+          getNumbersToRender()
+        ]
+      )
+    );
   }
 }

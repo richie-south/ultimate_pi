@@ -191,19 +191,21 @@ class _Training extends State<Training> {
     return index;
   }
 
-  void saveRecordLength(int newResult) async {
+  void saveRecordLength(int newResult, {bool state = true}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int topResult = (prefs.getInt('topResult') ?? 0);
 
     if (newResult > topResult) {
       await prefs.setInt('topResult', newResult);
-      setState(() {
-        this.topResults = newResult;
-      });
+      if (state) {
+        setState(() {
+          this.topResults = newResult;
+        });
+      }
     }
   }
 
-  void saveTopStreak(int newStreak, int start, int end) async {
+  void saveTopStreak(int newStreak, int start, int end, {bool state = true}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int topStreak = (prefs.getInt('topStreak') ?? 0);
 
@@ -211,21 +213,25 @@ class _Training extends State<Training> {
       await prefs.setInt('topStreak', newStreak);
       await prefs.setInt('streakStart', start);
       await prefs.setInt('streakEnd', end);
-      setState(() {
-        this.topStreak = newStreak;
-      });
+      if (state) {
+        setState(() {
+          this.topStreak = newStreak;
+        });
+      }
     }
   }
 
-  void saveTopPoints(int points) async {
+  void saveTopPoints(int points, {bool state = true}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int topPoints = (prefs.getInt('topPoints') ?? 0);
 
     if (points > topPoints) {
       await prefs.setInt('topPoints', points);
-      setState(() {
-        this.topPoints = points;
-      });
+      if (state) {
+        setState(() {
+          this.topPoints = points;
+        });
+      }
     }
   }
 
@@ -251,6 +257,28 @@ class _Training extends State<Training> {
     setState(() {
       this.topPoints = value;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    var streakData = getLongestStreak(this.values);
+    int streakLength = streakData[0];
+    int streakStartPosition = streakData[1];
+    int streakEndPosition = streakData[2];
+    int result = getResult(this.values);
+
+    if (streakLength > this.topStreak) {
+      saveTopStreak(streakLength, streakStartPosition, streakEndPosition, state: false);
+    }
+    if (result > this.topResults) {
+      saveRecordLength(result, state: false);
+    }
+
+    if (this.points > this.topPoints) {
+      saveTopPoints(this.points, state: false);
+    }
   }
 
   void onPress(String value) {

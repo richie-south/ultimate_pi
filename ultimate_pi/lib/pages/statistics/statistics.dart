@@ -95,7 +95,7 @@ class _Statistics extends State<Statistics> {
           int total = this.total;
           int point = this.points;
           int combo = this.streak;
-          Share.share('I know $total decimals of π!! #ultimatePi, and i got a score of $point and my longet combo is $combo');
+          Share.share('I know $total decimals of π!! and i got a score of $point with my longest combo $combo, crush my score here: https://goo.gl/J6YaVm');
         },
         child: new IconTheme(
           data: new IconThemeData(

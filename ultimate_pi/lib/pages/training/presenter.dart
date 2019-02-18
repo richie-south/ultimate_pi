@@ -96,7 +96,7 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
                       value.isCorrect ? FontWeight.normal : FontWeight.w600,
                   fontSize: 60.0,
                   letterSpacing: 8.0,
-                  decorationStyle: TextDecorationStyle.wavy,
+                  decorationStyle: TextDecorationStyle.solid,
                   decorationColor:
                       useAlternateColor ? Colors.blue[100] : Colors.blue,
                   decoration: value.isOnStreak
@@ -115,8 +115,19 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
                         reveals.add(value.position);
                       }
                     });
+                  } else if (value.isOnStreak) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => SimpleDialog(
+                        title: const Text('STREAK'),
+                        children: <Widget>[
+                          Container()
+                        ],
+                      )
+                    );
                   }
                 },
+
             );
             index += 1;
             return textSpan;
