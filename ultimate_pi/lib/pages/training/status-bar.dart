@@ -9,8 +9,8 @@ class StatusContainer extends StatefulWidget {
   final int rawData;
 
   StatusContainer(
-      {@required this.statusType,
-      @required this.statusData,
+      {required this.statusType,
+      required this.statusData,
       this.large = false,
       this.rawData = 0});
 
@@ -22,7 +22,7 @@ class StatusContainer extends StatefulWidget {
 
 class _StatusContainer extends State<StatusContainer>
     with TickerProviderStateMixin {
-  AnimationController animationController;
+  AnimationController? animationController;
   double fontSize = 14.0;
   double _width = 80.0;
   bool _resized = false;
@@ -35,7 +35,7 @@ class _StatusContainer extends State<StatusContainer>
       duration: const Duration(milliseconds: 200),
     );
 
-    animationController.forward();
+    animationController!.forward();
   }
 
   @override
@@ -43,7 +43,7 @@ class _StatusContainer extends State<StatusContainer>
     return Expanded(
         child: ScaleTransition(
       scale: CurvedAnimation(
-        parent: animationController,
+        parent: animationController!,
         curve: Curves.easeInOut,
       ),
       child: Column(
@@ -118,7 +118,7 @@ class Streak extends StatelessWidget {
     '❤️'
   ];
 
-  Streak({@required this.streak});
+  Streak({required this.streak});
 
   String getStreakEmoji(Random _random) {
     if (streak > streakEmoji.length - 1) {
@@ -168,10 +168,10 @@ class StatusBar extends StatelessWidget {
   final int points;
 
   StatusBar({
-    @required this.digits,
-    @required this.errors,
-    @required this.streak,
-    @required this.points,
+    required this.digits,
+    required this.errors,
+    required this.streak,
+    required this.points,
   });
 
   String getSuccessRate() {

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Entered {
   final String streakId;
   final bool isCorrect;
@@ -11,13 +9,13 @@ class Entered {
   bool isOnStreak = false;
 
   Entered({
-    @required this.streakId,
-    @required this.isCorrect,
-    @required this.timeNow,
-    @required this.inputTime,
-    @required this.value,
-    @required this.correctValue,
-    @required this.position,
+    required this.streakId,
+    required this.isCorrect,
+    required this.timeNow,
+    required this.inputTime,
+    required this.value,
+    required this.correctValue,
+    required this.position,
   });
 
   void setIsOnStreak (bool value) {

@@ -8,8 +8,8 @@ class Stats extends StatelessWidget {
   final String title;
 
   Stats({
-    @required this.data,
-    @required this.title
+    required this.data,
+    required this.title
   });
 
   @override

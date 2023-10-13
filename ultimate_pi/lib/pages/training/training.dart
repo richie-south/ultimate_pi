@@ -21,11 +21,11 @@ class _Training extends State<Training> {
   /* List<Map> values = []; */
   List<Entered> values = [];
   int points = 0;
-  DateTime latestValueTime = null;
+  DateTime? latestValueTime;
   String streakId = 'id';
   int errors = 0;
   int streak = 0;
-  Timer timer;
+  Timer? timer;
   int topResults = 0;
   int topStreak = 0;
   int topPoints = 0;
@@ -310,7 +310,7 @@ class _Training extends State<Training> {
         this.streakId = this._randomString(10);
         this.latestValueTime = null;
         if (this.timer != null) {
-          this.timer.cancel();
+          this.timer!.cancel();
         }
       });
     } else {
@@ -325,7 +325,7 @@ class _Training extends State<Training> {
             if (this.streak > 1) {
               this.points += getStreakPoint(this.streak);
             }
-            this.timer.cancel();
+            this.timer!.cancel();
           }
           this.streak = 0;
         } else {
@@ -334,11 +334,11 @@ class _Training extends State<Training> {
 
         var timeNow = DateTime.now();
         var time = latestValueTime == null ? DateTime.now() : latestValueTime;
-        var plusFive = time.add(Duration(milliseconds: 400));
+        var plusFive = time!.add(Duration(milliseconds: 400));
         if (isCorrect) {
           if (plusFive.isBefore(timeNow)) {
             if (this.timer != null) {
-              this.timer.cancel();
+              this.timer!.cancel();
             }
             this.latestValueTime = DateTime.now();
             plusFive = DateTime.now();
@@ -352,7 +352,7 @@ class _Training extends State<Training> {
             this.streak = this.streak + 1;
 
             if (this.timer != null) {
-              this.timer.cancel();
+              this.timer!.cancel();
             }
             this.timer = Timer(new Duration(seconds: 1), () {
               setState(() {
