@@ -13,9 +13,9 @@ class Presenter extends StatefulWidget {
   final int errors;
 
   Presenter({
-   required this.values,
-   required this.streak,
-   required this.errors,
+    required this.values,
+    required this.streak,
+    required this.errors,
   });
 
   @override
@@ -56,9 +56,12 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
   }
 
   int _getStreakLength(String streakId) {
-    return widget.values.where((value) {
-      return value.streakId == streakId;
-    }).toList().length;
+    return widget.values
+        .where((value) {
+          return value.streakId == streakId;
+        })
+        .toList()
+        .length;
   }
 
   String _getStreakTime(String streakId) {
@@ -77,6 +80,8 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
     int secondsDiff = last.timeNow.difference(first.timeNow).inSeconds;
     return '$secondsDiff';
   }
+
+
 
   Widget buildPiSequence(BuildContext context) {
     int index = 0;
@@ -127,7 +132,9 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
                       : TextDecoration.none,
                   color: value.isCorrect
                       ? Colors.white
-                      : shouldReveal ? Colors.lightGreen[400] : Colors.red),
+                      : shouldReveal
+                          ? Colors.lightGreen[400]
+                          : Colors.red),
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
                   if (!value.isCorrect) {
@@ -140,29 +147,21 @@ class _Presenter extends State<Presenter> with SingleTickerProviderStateMixin {
                     });
                   } else if (value.isOnStreak) {
                     showDialog(
-                      context: context,
-                      builder: (_) => SimpleDialog(
-                        contentPadding: EdgeInsets.all(16),
-                        title: const Text('STREAK 😃'),
-                        children: <Widget>[
-                          Text(
-                            'length: ${_getStreakLength(value.streakId).toString()}',
-                            style:TextStyle(
-                              fontSize: 16
-                            )
-                          ),
-                          Text(
-                            'time in sec: ${_getStreakTime(value.streakId)}',
-                            style: TextStyle(
-                              fontSize: 16
-                            )
-                          )
-                        ],
-                      )
-                    );
+                        context: context,
+                        builder: (_) => SimpleDialog(
+                              contentPadding: EdgeInsets.all(16),
+                              title: const Text('STREAK 😃'),
+                              children: <Widget>[
+                                Text(
+                                    'length: ${_getStreakLength(value.streakId).toString()}',
+                                    style: TextStyle(fontSize: 16)),
+                                Text(
+                                    'time in sec: ${_getStreakTime(value.streakId)}',
+                                    style: TextStyle(fontSize: 16))
+                              ],
+                            ));
                   }
                 },
-
             );
             index += 1;
             return textSpan;
