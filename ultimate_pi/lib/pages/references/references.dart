@@ -82,7 +82,7 @@ class _References extends State<References> {
         )
       );
 
-      return textSpan;
+      // return textSpan;
 
     });
 
@@ -107,7 +107,7 @@ class _References extends State<References> {
       appBar: AppBar(
         title: Text('HELP'),
         actions: <Widget>[
-          FlatButton(
+          ElevatedButton(
             child: Text('LOAD MORE', style: TextStyle(color: Colors.white)),
             onPressed: onViewMore,
           )

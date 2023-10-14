@@ -1,3 +1,17 @@
+/// This file contains the implementation of the Training widget, which is a StatefulWidget.
+/// It displays a training screen for memorizing the digits of pi.
+/// The widget imports other widgets such as InputPad, Presenter, and StatusBar.
+/// It also imports the Entered class and the piNumbers list.
+/// The widget uses SharedPreferences to store and retrieve the top results, top streak, and top points.
+/// It contains methods for calculating the correctness of entered values, generating random strings, and calculating streak points.
+/// It also has methods for getting the longest streak and the current result, and for saving the top result and top streak.
+/// This file contains the implementation of the Training widget, which is a StatefulWidget.
+/// It displays a training screen for memorizing the digits of pi.
+/// The widget imports other widgets such as InputPad, Presenter, and StatusBar.
+/// It also imports the Entered class and the piNumbers list.
+/// The widget uses SharedPreferences to store and retrieve the top results, top streak, and top points.
+/// It contains methods for calculating the correctness of entered values, generating random strings, and calculating streak points.
+/// It also has methods for getting the longest streak and the current result, and for saving the top result and top streak.
 import 'dart:async';
 import 'dart:math';
 
@@ -10,6 +24,7 @@ import './presenter.dart';
 import './status-bar.dart';
 import '../../entered.dart';
 
+
 class Training extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -21,11 +36,11 @@ class _Training extends State<Training> {
   /* List<Map> values = []; */
   List<Entered> values = [];
   int points = 0;
-  DateTime latestValueTime = null;
+  DateTime? latestValueTime;
   String streakId = 'id';
   int errors = 0;
   int streak = 0;
-  Timer timer;
+  Timer? timer;
   int topResults = 0;
   int topStreak = 0;
   int topPoints = 0;
@@ -94,22 +109,22 @@ class _Training extends State<Training> {
   List<int> getLongestStreak(List<Entered> values) {
     int index = 0;
 
-  	int longestStreakStartPosition = -1;
-  	int longestStreakEndPosition = -1;
-  	int longestStreakLength = 0;
+    int longestStreakStartPosition = -1;
+    int longestStreakEndPosition = -1;
+    int longestStreakLength = 0;
 
-  	bool isCurrentrlyOnStreak = false;
-  	int currentStreakStartPosition = -1;
-  	int currentStreakEndPosition = -1;
-  	int currentStreakLength = 0;
-  	values.forEach((Entered current) {
+    bool isCurrentrlyOnStreak = false;
+    int currentStreakStartPosition = -1;
+    int currentStreakEndPosition = -1;
+    int currentStreakLength = 0;
+    values.forEach((Entered current) {
       // is not first value
       if (index == 0 && values.length > 1) {
-      	Entered next = values[index + 1];
+        Entered next = values[index + 1];
         if (current.isSameStreakId(next)) {
           // should always be false bu hwo knows..
-        	if (!isCurrentrlyOnStreak) {
-          	isCurrentrlyOnStreak = true;
+          if (!isCurrentrlyOnStreak) {
+            isCurrentrlyOnStreak = true;
             currentStreakStartPosition = index;
             currentStreakLength += 1;
           }
@@ -119,33 +134,32 @@ class _Training extends State<Training> {
         if (current.isSameStreakId(prevoius)) {
           // is first value of streak
           if (!isCurrentrlyOnStreak) {
-          	isCurrentrlyOnStreak = true;
+            isCurrentrlyOnStreak = true;
             currentStreakStartPosition = index;
           }
 
           currentStreakLength += 1;
         } else {
           if (isCurrentrlyOnStreak) {
-          	isCurrentrlyOnStreak = false;
-          	currentStreakEndPosition = index;
+            isCurrentrlyOnStreak = false;
+            currentStreakEndPosition = index;
 
             if (currentStreakLength > longestStreakLength) {
               longestStreakLength = currentStreakLength;
 
               longestStreakStartPosition = currentStreakStartPosition;
-  						longestStreakEndPosition = currentStreakEndPosition;
+              longestStreakEndPosition = currentStreakEndPosition;
 
               currentStreakLength = 0;
               currentStreakStartPosition = -1;
               currentStreakEndPosition = -1;
             }
           }
-
         }
       }
 
       // is on streak for last value
-      if (index == values.length -1) {
+      if (index == values.length - 1) {
         if (isCurrentrlyOnStreak) {
           isCurrentrlyOnStreak = false;
           currentStreakEndPosition = index;
@@ -172,7 +186,7 @@ class _Training extends State<Training> {
       longestStreakEndPosition -= 1;
     }
 
-		return [
+    return [
       longestStreakLength,
       longestStreakStartPosition,
       longestStreakEndPosition
@@ -181,8 +195,8 @@ class _Training extends State<Training> {
 
   int getResult(List<Entered> values) {
     int index = 0;
-    for(final value in this.values){
-      if (!value.isCorrect){
+    for (final value in this.values) {
+      if (!value.isCorrect) {
         break;
       }
       index += 1;
@@ -205,7 +219,8 @@ class _Training extends State<Training> {
     }
   }
 
-  void saveTopStreak(int newStreak, int start, int end, {bool state = true}) async {
+  void saveTopStreak(int newStreak, int start, int end,
+      {bool state = true}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int topStreak = (prefs.getInt('topStreak') ?? 0);
 
@@ -270,7 +285,8 @@ class _Training extends State<Training> {
     int result = getResult(this.values);
 
     if (streakLength > this.topStreak) {
-      saveTopStreak(streakLength, streakStartPosition, streakEndPosition, state: false);
+      saveTopStreak(streakLength, streakStartPosition, streakEndPosition,
+          state: false);
     }
     if (result > this.topResults) {
       saveRecordLength(result, state: false);
@@ -279,6 +295,20 @@ class _Training extends State<Training> {
     if (this.points > this.topPoints) {
       saveTopPoints(this.points, state: false);
     }
+  }
+
+  void _checkGuessLessOrMore(int userGuess, int correctAnswer) {
+    // close previous snack bar if any
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          userGuess > correctAnswer ? "Too High" : "Too Low",
+        ),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   void onPress(String value) {
@@ -310,13 +340,15 @@ class _Training extends State<Training> {
         this.streakId = this._randomString(10);
         this.latestValueTime = null;
         if (this.timer != null) {
-          this.timer.cancel();
+          this.timer!.cancel();
         }
       });
     } else {
       setState(() {
         var isCorrect = this.isCorrect(this.values.length, value);
         if (!isCorrect) {
+          _checkGuessLessOrMore(
+              int.parse(value), int.parse(getCorrectPi(this.values.length)));
           this.errors = this.errors + 1;
           this.streakId = this._randomString(10);
           this.latestValueTime = null;
@@ -325,7 +357,7 @@ class _Training extends State<Training> {
             if (this.streak > 1) {
               this.points += getStreakPoint(this.streak);
             }
-            this.timer.cancel();
+            this.timer!.cancel();
           }
           this.streak = 0;
         } else {
@@ -334,11 +366,11 @@ class _Training extends State<Training> {
 
         var timeNow = DateTime.now();
         var time = latestValueTime == null ? DateTime.now() : latestValueTime;
-        var plusFive = time.add(Duration(milliseconds: 400));
+        var plusFive = time!.add(Duration(milliseconds: 400));
         if (isCorrect) {
           if (plusFive.isBefore(timeNow)) {
             if (this.timer != null) {
-              this.timer.cancel();
+              this.timer!.cancel();
             }
             this.latestValueTime = DateTime.now();
             plusFive = DateTime.now();
@@ -352,7 +384,7 @@ class _Training extends State<Training> {
             this.streak = this.streak + 1;
 
             if (this.timer != null) {
-              this.timer.cancel();
+              this.timer!.cancel();
             }
             this.timer = Timer(new Duration(seconds: 1), () {
               setState(() {
@@ -391,10 +423,10 @@ class _Training extends State<Training> {
       children: <Widget>[
         Expanded(
           child: Presenter(
-              streak: this.streak,
-              values: this.values,
-              errors: this.errors,
-            ),
+            streak: this.streak,
+            values: this.values,
+            errors: this.errors,
+          ),
         ),
         StatusBar(
           errors: this.errors,

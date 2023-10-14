@@ -7,7 +7,7 @@ import './pages/statistics/statistics.dart';
 void main() => runApp(MaterialApp(
         theme: new ThemeData(
             primaryColor: Colors.black,
-            backgroundColor: Colors.black,
+            
             scaffoldBackgroundColor: Colors.black),
         initialRoute: '/',
         routes: {
@@ -28,7 +28,7 @@ class SelectPage extends StatelessWidget {
           child: Container(
             constraints: const BoxConstraints.expand(),
             color: Colors.black,
-            child: FlatButton(
+            child: ElevatedButton(
                 child: Text('HELP',
                     style: TextStyle(
                         color: Colors.white,
@@ -42,7 +42,7 @@ class SelectPage extends StatelessWidget {
         Container(
           color: Colors.black,
           height: 100.0,
-          child: FlatButton(
+          child: ElevatedButton(
               child: Text('STATISTICS',
                   style: TextStyle(
                       color: Colors.white,
@@ -55,7 +55,7 @@ class SelectPage extends StatelessWidget {
         Expanded(
             child: Container(
           constraints: const BoxConstraints.expand(),
-          child: FlatButton(
+          child: ElevatedButton(
             child: Text('GO!',
                 style: TextStyle(
                     color: Colors.white,

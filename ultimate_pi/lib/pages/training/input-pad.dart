@@ -7,8 +7,8 @@ class PadButton extends StatelessWidget {
   final bool disabled;
 
   PadButton(
-      {@required this.onPress,
-      @required this.textValue,
+      {required this.onPress,
+      required this.textValue,
       this.useSecondColor = false,
       this.disabled = false});
 
@@ -17,10 +17,13 @@ class PadButton extends StatelessWidget {
     return Expanded(
         child: ButtonTheme(
       height: 100.0,
-      child: FlatButton(
-        shape: const StadiumBorder(),
-        textColor: Colors.white,
-        color: this.disabled ? Color.fromRGBO(33, 33, 33, 1.0) : Colors.black,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: const StadiumBorder(),
+          textStyle: TextStyle(fontSize: 30.0, color: Colors.white ),
+          backgroundColor: this.disabled ? Color.fromRGBO(33, 33, 33, 1.0) : Colors.black,
+        ),
+
         child: Text(this.textValue,
             style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.w400)),
         onPressed: () {
@@ -36,7 +39,7 @@ class PadButton extends StatelessWidget {
 class Pad extends StatelessWidget {
   final void Function(String) onPress;
   final bool disableClear;
-  Pad({@required this.onPress, @required this.disableClear});
+  Pad({required this.onPress, required this.disableClear});
 
   @override
   Widget build(BuildContext context) {
