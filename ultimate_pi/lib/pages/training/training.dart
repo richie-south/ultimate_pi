@@ -23,7 +23,7 @@ import './input-pad.dart';
 import './presenter.dart';
 import './status-bar.dart';
 import '../../entered.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 
 class Training extends StatefulWidget {
   @override
